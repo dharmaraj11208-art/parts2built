@@ -9,6 +9,8 @@ export type ComponentCategory =
 
 export type ComponentCondition = 'Tested & Working' | 'Functional / Untested' | 'Needs Desoldering / Minor Repair';
 
+export type ListingType = 'internal' | 'sale' | 'rent' | 'sale_or_rent';
+
 export interface ElectronicComponent {
   id: string;
   name: string;
@@ -22,6 +24,32 @@ export interface ElectronicComponent {
   imageUrl?: string;
   notes?: string;
   pinoutOrSpecs?: string;
+
+  // Marketplace: Buy, Sell & Rent properties
+  listingType?: ListingType;
+  pricePerUnit?: number;        // Purchase price in USD (for buyers)
+  rentalRatePerDay?: number;    // Rental price per day in USD
+  rentalDeposit?: number;       // Refundable security deposit in USD
+  sellerName?: string;          // Seller / Department / Lab name
+  sellerRating?: number;        // e.g. 4.9
+  sellerLocation?: string;      // e.g. "Bay 12 - Hardware Test Depot"
+}
+
+export interface MarketplaceTransaction {
+  id: string;
+  componentId: string;
+  componentName: string;
+  type: 'buy' | 'rent';
+  quantity: number;
+  unitPrice: number;
+  rentalDays?: number;
+  depositAmount?: number;
+  totalAmount: number;
+  buyerName: string;
+  sellerName: string;
+  date: string;
+  status: 'completed' | 'active_rental' | 'returned';
+  returnDateEstimated?: string;
 }
 
 export interface RequiredComponent {

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { ThresholdStatus } from '../types';
-import { Cpu, Menu, X, Plus, BookOpen, ShieldCheck, AlertTriangle, ShieldAlert, Bot, Sparkles } from 'lucide-react';
+import { Cpu, Menu, X, Plus, BookOpen, Bot } from 'lucide-react';
 
-export type NavTab = 'dashboard' | 'inventory' | 'add' | 'projects' | 'recommendations' | 'quota';
+export type NavTab = 'dashboard' | 'inventory' | 'add' | 'projects' | 'recommendations' | 'marketplace';
 
 interface NavbarProps {
   activeTab: NavTab;
@@ -10,8 +9,6 @@ interface NavbarProps {
   onOpenAddModal: () => void;
   onOpenGuideModal: () => void;
   onOpenArise: () => void;
-  onOpenDoraemon: () => void;
-  thresholdStatus: ThresholdStatus;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -19,41 +16,16 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectTab,
   onOpenAddModal,
   onOpenGuideModal,
-  onOpenArise,
-  onOpenDoraemon,
-  thresholdStatus
+  onOpenArise
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const statusIndicator = {
-    safe: {
-      color: 'text-emerald-400',
-      dotColor: 'bg-emerald-500',
-      text: 'Safe Disposal Rate',
-      icon: ShieldCheck
-    },
-    warning: {
-      color: 'text-amber-400',
-      dotColor: 'bg-amber-500',
-      text: 'Caution Limit',
-      icon: AlertTriangle
-    },
-    danger: {
-      color: 'text-rose-400',
-      dotColor: 'bg-rose-500',
-      text: 'Danger Threshold',
-      icon: ShieldAlert
-    }
-  }[thresholdStatus];
-
-  const StatusIcon = statusIndicator.icon;
-
-  const navLinks: { id: NavTab; label: string }[] = [
+  const navLinks: { id: NavTab; label: string; highlight?: boolean }[] = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'inventory', label: 'Available Parts' },
     { id: 'projects', label: 'Reuse Projects' },
     { id: 'recommendations', label: 'Recommendations' },
-    { id: 'quota', label: 'Disposal Quota' }
+    { id: 'marketplace', label: 'Buy / Sell / Rent', highlight: true }
   ];
 
   return (
@@ -82,13 +54,20 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 key={link.id}
                 onClick={() => onSelectTab(link.id)}
-                className={`px-3 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+                className={`px-3 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all whitespace-nowrap flex items-center gap-1.5 ${
                   isActive
-                    ? 'bg-slate-800 text-white font-semibold'
+                    ? 'bg-slate-800 text-white font-semibold shadow-inner'
+                    : link.highlight
+                    ? 'text-emerald-300 hover:text-white hover:bg-emerald-500/10 border border-emerald-500/30'
                     : 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/60'
                 }`}
               >
-                {link.label}
+                <span>{link.label}</span>
+                {link.highlight && !isActive && (
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 uppercase font-bold">
+                    Trade
+                  </span>
+                )}
               </button>
             );
           })}
@@ -96,17 +75,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Zone 3: Primary Actions & Status */}
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Doraemon AI Robot Demo Button */}
-          <button
-            onClick={onOpenDoraemon}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition-all focus:outline-none"
-            title="Doraemon AI Robot Demonstration (Speaks English)"
-          >
-            <span className="text-sm leading-none">🤖</span>
-            <span className="font-mono">Robot Demo</span>
-            <span className="hidden xl:inline text-[10px] text-cyan-400">· Speaks EN</span>
-          </button>
-
           {/* ARISE AI Agent Button */}
           <button
             onClick={onOpenArise}
@@ -116,17 +84,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Bot className="w-4 h-4 text-emerald-400 animate-pulse" />
             <span className="font-mono tracking-wide">ARISE AI</span>
             <span className="hidden xl:inline text-[10px] text-emerald-400/80">· IoT Friend</span>
-          </button>
-
-          {/* Facility Status Indicator Pill */}
-          <button
-            onClick={() => onSelectTab('quota')}
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-colors"
-            title="Click to view facility disposal monitor"
-          >
-            <span className={`w-2 h-2 rounded-full ${statusIndicator.dotColor} animate-pulse`} />
-            <StatusIcon className={`w-3 h-3 ${statusIndicator.color}`} />
-            <span className="font-mono text-slate-300 text-[11px]">{statusIndicator.text}</span>
           </button>
 
           {/* Student Presentation Guide Button */}
@@ -163,21 +120,6 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-slate-800 bg-slate-950 px-4 py-3 space-y-2">
-          {/* Mobile Doraemon Trigger */}
-          <button
-            onClick={() => {
-              onOpenDoraemon();
-              setMobileMenuOpen(false);
-            }}
-            className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300"
-          >
-            <span className="flex items-center gap-2">
-              <span className="text-base leading-none">🤖</span>
-              <span>Doraemon AI Robot Demo (English Voice)</span>
-            </span>
-            <span className="text-[10px] font-mono text-cyan-400">Play &rarr;</span>
-          </button>
-
           {/* Mobile ARISE Trigger */}
           <button
             onClick={() => {
@@ -220,20 +162,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <BookOpen className="w-4 h-4 text-emerald-400" />
               <span>College Presentation Guide & Roadmap</span>
-            </button>
-
-            <button
-              onClick={() => {
-                onSelectTab('quota');
-                setMobileMenuOpen(false);
-              }}
-              className="flex items-center justify-between px-3 py-2 text-xs font-mono rounded-lg bg-slate-900 border border-slate-800"
-            >
-              <span className="text-slate-400">Monthly Facility Status:</span>
-              <span className={`font-semibold flex items-center gap-1.5 ${statusIndicator.color}`}>
-                <span className={`w-2 h-2 rounded-full ${statusIndicator.dotColor}`} />
-                {statusIndicator.text}
-              </span>
             </button>
           </div>
         </div>

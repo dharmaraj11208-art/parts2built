@@ -1,4 +1,4 @@
-import { ElectronicComponent, ReuseProject, MonthlyQuotaConfig } from '../types';
+import { ElectronicComponent, ReuseProject, MarketplaceTransaction } from '../types';
 
 export const INITIAL_COMPONENTS: ElectronicComponent[] = [
   {
@@ -13,7 +13,12 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     dateAdded: '2026-09-28',
     imageUrl: '/src/assets/images/electronic_components_tray_1791201399697.jpg',
     notes: 'Forward voltage: 2.0V - 3.2V, Forward current: 20mA. Assorted Red, Green, and Warm White.',
-    pinoutOrSpecs: 'Long lead = Anode (+), Short lead with flat rim = Cathode (-)'
+    pinoutOrSpecs: 'Long lead = Anode (+), Short lead with flat rim = Cathode (-)',
+    listingType: 'sale',
+    pricePerUnit: 0.12,
+    sellerName: 'Display Board Assembly Line',
+    sellerLocation: 'Detroit Facility - Bay 3',
+    sellerRating: 4.9
   },
   {
     id: 'comp-2',
@@ -27,7 +32,12 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     dateAdded: '2026-09-29',
     imageUrl: '/src/assets/images/electronic_components_tray_1791201399697.jpg',
     notes: '0.25W power rating, ±5% tolerance. Desoldered and lead-tested on digital multimeter.',
-    pinoutOrSpecs: 'Color bands: Red-Red-Brown-Gold (220Ω), Brown-Black-Red-Gold (1kΩ)'
+    pinoutOrSpecs: 'Color bands: Red-Red-Brown-Gold (220Ω), Brown-Black-Red-Gold (1kΩ)',
+    listingType: 'sale',
+    pricePerUnit: 0.05,
+    sellerName: 'Automotive Sub-assembly Depot',
+    sellerLocation: 'Cleveland Electronics Lab',
+    sellerRating: 4.8
   },
   {
     id: 'comp-3',
@@ -41,7 +51,14 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     dateAdded: '2026-10-01',
     imageUrl: '/src/assets/images/arduino_circuit_project_1791201414517.jpg',
     notes: 'ATmega328P microcontroller with CH340 USB-UART chip. Working bootloader, tested with Blink.',
-    pinoutOrSpecs: '14 Digital I/O (6 PWM), 6 Analog Inputs, Operating Voltage 5V DC'
+    pinoutOrSpecs: '14 Digital I/O (6 PWM), 6 Analog Inputs, Operating Voltage 5V DC',
+    listingType: 'sale_or_rent',
+    pricePerUnit: 14.50,
+    rentalRatePerDay: 1.50,
+    rentalDeposit: 15.00,
+    sellerName: 'TechLab Robotics Workshop',
+    sellerLocation: 'Academic Hardware Bay 4',
+    sellerRating: 5.0
   },
   {
     id: 'comp-4',
@@ -55,7 +72,14 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     dateAdded: '2026-10-02',
     imageUrl: '/src/assets/images/electronic_components_tray_1791201399697.jpg',
     notes: 'Dual shaft gear motor with 1:48 gear ratio. Nominal speed 200 RPM at 6V.',
-    pinoutOrSpecs: '2-wire polarity reversible DC motor, stalls at 800mA'
+    pinoutOrSpecs: '2-wire polarity reversible DC motor, stalls at 800mA',
+    listingType: 'sale_or_rent',
+    pricePerUnit: 2.20,
+    rentalRatePerDay: 0.50,
+    rentalDeposit: 3.00,
+    sellerName: 'Conveyor Sorting Lab',
+    sellerLocation: 'Chicago Plant',
+    sellerRating: 4.7
   },
   {
     id: 'comp-5',
@@ -68,7 +92,12 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     industrialSource: 'Prototype Testing Bench Cleanout',
     dateAdded: '2026-09-30',
     notes: '20cm multi-colored breadboard connection leads with molded 2.54mm pitch terminals.',
-    pinoutOrSpecs: 'Standard 24 AWG stranded copper with insulated PVC sleeve'
+    pinoutOrSpecs: 'Standard 24 AWG stranded copper with insulated PVC sleeve',
+    listingType: 'sale',
+    pricePerUnit: 0.10,
+    sellerName: 'Prototyping Bench Scrap',
+    sellerLocation: 'Facility A - Electronics',
+    sellerRating: 4.8
   },
   {
     id: 'comp-6',
@@ -82,7 +111,12 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     dateAdded: '2026-10-01',
     imageUrl: '/src/assets/images/electronic_components_tray_1791201399697.jpg',
     notes: 'Rating: 6A 250V AC / 10A 125V AC for rocker; 12V 50mA for mini push buttons.',
-    pinoutOrSpecs: '2-pin single pole single throw latching / momentary'
+    pinoutOrSpecs: '2-pin single pole single throw latching / momentary',
+    listingType: 'sale',
+    pricePerUnit: 0.75,
+    sellerName: 'Control Panel Salvage Co.',
+    sellerLocation: 'Milwaukee Depot',
+    sellerRating: 4.9
   },
   {
     id: 'comp-7',
@@ -96,7 +130,14 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     dateAdded: '2026-10-02',
     imageUrl: '/src/assets/images/solar_smart_monitor_1791201430265.jpg',
     notes: 'Non-contact distance measurement: 2cm to 400cm, accuracy up to 3mm.',
-    pinoutOrSpecs: 'Pins: VCC (5V), Trig (Pulse input), Echo (Pulse output), GND'
+    pinoutOrSpecs: 'Pins: VCC (5V), Trig (Pulse input), Echo (Pulse output), GND',
+    listingType: 'sale_or_rent',
+    pricePerUnit: 3.80,
+    rentalRatePerDay: 0.80,
+    rentalDeposit: 5.00,
+    sellerName: 'AGV Test Rig Surplus',
+    sellerLocation: 'Robotics Wing Bay 9',
+    sellerRating: 4.9
   },
   {
     id: 'comp-8',
@@ -110,7 +151,14 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     dateAdded: '2026-10-03',
     imageUrl: '/src/assets/images/solar_smart_monitor_1791201430265.jpg',
     notes: 'Resistive probe with onboard LM393 comparator and potentiometer threshold adjustment.',
-    pinoutOrSpecs: 'VCC, GND, DO (Digital threshold), AO (Analog voltage 0-5V)'
+    pinoutOrSpecs: 'VCC, GND, DO (Digital threshold), AO (Analog voltage 0-5V)',
+    listingType: 'sale_or_rent',
+    pricePerUnit: 2.90,
+    rentalRatePerDay: 0.60,
+    rentalDeposit: 4.00,
+    sellerName: 'Greenhouse IoT Team',
+    sellerLocation: 'AgriTech Annex',
+    sellerRating: 4.8
   },
   {
     id: 'comp-9',
@@ -124,7 +172,14 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     dateAdded: '2026-10-04',
     imageUrl: '/src/assets/images/ewaste_sorting_hero_1791201380637.jpg',
     notes: 'Intact screen, functional WiFi, 3000mAh lithium battery. Cracked back glass but operational camera.',
-    pinoutOrSpecs: 'Micro-USB charge port, 5V 1A input, WiFi 802.11 b/g/n, 8MP camera'
+    pinoutOrSpecs: 'Micro-USB charge port, 5V 1A input, WiFi 802.11 b/g/n, 8MP camera',
+    listingType: 'sale_or_rent',
+    pricePerUnit: 22.00,
+    rentalRatePerDay: 2.50,
+    rentalDeposit: 25.00,
+    sellerName: 'Corporate IT Refurbish Hub',
+    sellerLocation: 'Austin IT Depot',
+    sellerRating: 4.7
   },
   {
     id: 'comp-10',
@@ -137,7 +192,12 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     industrialSource: 'IT Dept Peripheral Cleanup',
     dateAdded: '2026-10-03',
     notes: 'Standard 4-core shielded copper cable with intact jacket and molded strain relief.',
-    pinoutOrSpecs: 'Red (+5V), Black (GND), Green (Data+), White (Data-)'
+    pinoutOrSpecs: 'Red (+5V), Black (GND), Green (Data+), White (Data-)',
+    listingType: 'sale',
+    pricePerUnit: 1.20,
+    sellerName: 'Peripheral Recycle Bin',
+    sellerLocation: 'Main Depot',
+    sellerRating: 4.9
   },
   {
     id: 'comp-11',
@@ -150,7 +210,75 @@ export const INITIAL_COMPONENTS: ElectronicComponent[] = [
     industrialSource: 'Sensor Enclosure Test Prototypes',
     dateAdded: '2026-10-01',
     notes: 'Black molded ABS with nickel-plated spring contacts and 15cm color-coded flying leads.',
-    pinoutOrSpecs: 'Red wire positive (+6V for 4xAA, +9V for snap), Black wire negative (GND)'
+    pinoutOrSpecs: 'Red wire positive (+6V for 4xAA, +9V for snap), Black wire negative (GND)',
+    listingType: 'sale_or_rent',
+    pricePerUnit: 1.50,
+    rentalRatePerDay: 0.40,
+    rentalDeposit: 2.00,
+    sellerName: 'Sensor Enclosure Test Dept',
+    sellerLocation: 'Testing Lab 2',
+    sellerRating: 4.8
+  }
+];
+
+export const INITIAL_TRANSACTIONS: MarketplaceTransaction[] = [
+  {
+    id: 'tx-1',
+    componentId: 'comp-3',
+    componentName: 'Arduino Uno Rev3 Compatible Microcontroller',
+    type: 'rent',
+    quantity: 1,
+    unitPrice: 1.50,
+    rentalDays: 7,
+    depositAmount: 15.00,
+    totalAmount: 25.50,
+    buyerName: 'Senior Capstone Robotics Team',
+    sellerName: 'TechLab Robotics Workshop',
+    date: '2026-10-02',
+    status: 'active_rental',
+    returnDateEstimated: '2026-10-09'
+  },
+  {
+    id: 'tx-2',
+    componentId: 'comp-1',
+    componentName: '5mm High-Intensity LEDs (Pack of 10)',
+    type: 'buy',
+    quantity: 5,
+    unitPrice: 0.12,
+    totalAmount: 0.60,
+    buyerName: 'Emergency Flashlight Project Group',
+    sellerName: 'Display Board Assembly Line',
+    date: '2026-10-03',
+    status: 'completed'
+  },
+  {
+    id: 'tx-3',
+    componentId: 'comp-7',
+    componentName: 'HC-SR04 Ultrasonic Distance Sensor',
+    type: 'buy',
+    quantity: 2,
+    unitPrice: 3.80,
+    totalAmount: 7.60,
+    buyerName: 'Smart Rover Makers',
+    sellerName: 'AGV Test Rig Surplus',
+    date: '2026-10-04',
+    status: 'completed'
+  },
+  {
+    id: 'tx-4',
+    componentId: 'comp-9',
+    componentName: 'Salvaged Mobile Phone (Android Test Unit)',
+    type: 'rent',
+    quantity: 1,
+    unitPrice: 2.50,
+    rentalDays: 3,
+    depositAmount: 25.00,
+    totalAmount: 32.50,
+    buyerName: 'IoT Vision AI Student Lab',
+    sellerName: 'Corporate IT Refurbish Hub',
+    date: '2026-10-01',
+    status: 'returned',
+    returnDateEstimated: '2026-10-04'
   }
 ];
 

@@ -1,15 +1,12 @@
 import React from 'react';
 import {
   ElectronicComponent,
-  ReuseProject,
-  MonthlyQuotaConfig
+  ReuseProject
 } from '../types';
 import {
   calculateTotalInventoryMassKg,
-  calculateProjectFeasibility,
-  getMonthlyDisposalMetrics
+  calculateProjectFeasibility
 } from '../utils/calculator';
-import { DisposalQuotaBarometer } from './DisposalQuotaBarometer';
 import { Interactive3DComponent } from './Interactive3DComponent';
 import {
   Cpu,
@@ -32,27 +29,21 @@ import { NavTab } from './Navbar';
 interface DashboardViewProps {
   components: ElectronicComponent[];
   projects: ReuseProject[];
-  quotaConfig: MonthlyQuotaConfig;
   onNavigate: (tab: NavTab) => void;
   onSelectProject: (project: ReuseProject) => void;
   onOpenAddModal: () => void;
   onOpenGuideModal: () => void;
-  onOpenQuotaModal: () => void;
   onOpenArise: () => void;
-  onOpenDoraemon: () => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
   components,
   projects,
-  quotaConfig,
   onNavigate,
   onSelectProject,
   onOpenAddModal,
   onOpenGuideModal,
-  onOpenQuotaModal,
-  onOpenArise,
-  onOpenDoraemon
+  onOpenArise
 }) => {
   const totalMassKg = calculateTotalInventoryMassKg(components);
   const totalUnits = components.reduce((sum, c) => sum + c.quantity, 0);
@@ -61,8 +52,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const feasibilityList = projects.map((p) => calculateProjectFeasibility(p, components));
   const readyProjects = feasibilityList.filter((f) => f.scorePercentage === 100);
   const potentialCO2AvoidedKg = feasibilityList.reduce((sum, f) => sum + f.estimatedCO2AvoidedKg, 0);
-
-  const disposalMetrics = getMonthlyDisposalMetrics(quotaConfig);
 
   return (
     <div className="space-y-8">
@@ -79,18 +68,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-            Discarded electronic components and decommissioned devices carry immense educational and practical potential. <strong>PARTS 2 BUILD</strong> catalogs salvage inventory, tracks monthly plant disposal safety thresholds, and matches components with viable engineering builds.
+            Discarded electronic components and decommissioned devices carry immense educational and practical potential. <strong>PARTS 2 BUILD</strong> catalogs salvage inventory, tracks reclaimed component volumes, and matches components with viable engineering builds.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button
-              onClick={onOpenDoraemon}
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-lg bg-gradient-to-r from-cyan-600 via-blue-600 to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 text-white shadow-md shadow-cyan-500/20 transition-all focus:outline-none"
-            >
-              <span className="text-base leading-none">🤖</span>
-              <span>Doraemon Robot Demo (Speaks English)</span>
-            </button>
-
             <button
               onClick={() => onNavigate('recommendations')}
               className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition-all focus:outline-none"
@@ -120,63 +101,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Hero subtle background decoration */}
         <div className="pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl" />
       </div>
-
-      {/* Doraemon AI Robot Cartoon Demonstration Banner */}
-      <div className="relative overflow-hidden rounded-2xl border border-cyan-500/40 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-950 p-6 shadow-xl shadow-cyan-500/5">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center gap-5">
-            <div className="relative shrink-0">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-cyan-400/80 shadow-lg shadow-cyan-500/20 bg-slate-950">
-                <img
-                  src="/src/assets/images/doraemon_ai_robot_1791203744626.jpg"
-                  alt="Doraemon AI Robot Cartoon Guide"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute -bottom-1 -right-1 bg-cyan-500 text-slate-950 text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                <span>AI</span>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400">
-                  AI Robot Cartoon Presentation Guide
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 font-semibold">
-                  Speaks in English
-                </span>
-              </div>
-              <h3 className="text-lg sm:text-xl font-bold text-white">
-                Meet Doraemon Robot: Your Project Demonstrator
-              </h3>
-              <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
-                Listen to our blue robotic companion present the whole PARTS 2 BUILD platform step-by-step in clear spoken English! Perfect for explaining the concept, formulas, and 3D visualizer to professors and evaluators.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
-            <button
-              onClick={onOpenDoraemon}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-white font-bold text-xs shadow-lg shadow-cyan-500/25 transition-all focus:outline-none"
-            >
-              <span className="text-base leading-none">🤖</span>
-              <span>Start English Speech Demonstration</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Ambient background glow */}
-        <div className="pointer-events-none absolute -right-10 -bottom-10 h-48 w-48 rounded-full bg-cyan-500/10 blur-2xl" />
-      </div>
-
-      {/* Monthly Disposal Quota Barometer */}
-      <DisposalQuotaBarometer
-        config={quotaConfig}
-        onOpenRecordsModal={onOpenQuotaModal}
-        onOpenAddRecordModal={onOpenQuotaModal}
-      />
 
       {/* Primary KPI Metrics Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

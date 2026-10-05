@@ -6,16 +6,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   ElectronicComponent,
-  ReuseProject,
-  MonthlyQuotaConfig,
-  ThresholdStatus
+  ReuseProject
 } from './types';
 import {
   INITIAL_COMPONENTS,
-  PREDEFINED_PROJECTS,
-  INITIAL_QUOTA_CONFIG
+  PREDEFINED_PROJECTS
 } from './data/mockData';
-import { getMonthlyDisposalMetrics, findMatchingInventoryComponent } from './utils/calculator';
+import { findMatchingInventoryComponent } from './utils/calculator';
 import { Bot } from 'lucide-react';
 
 // Components
@@ -27,14 +24,10 @@ import { RecommendationsView } from './components/RecommendationsView';
 import { AddEditComponentModal } from './components/AddEditComponentModal';
 import { ProjectDetailModal } from './components/ProjectDetailModal';
 import { PresentationGuideModal } from './components/PresentationGuideModal';
-import { DisposalRecordsModal } from './components/DisposalRecordsModal';
-import { DisposalQuotaBarometer } from './components/DisposalQuotaBarometer';
 import { AriseAgentDrawer } from './components/AriseAgentDrawer';
-import { DoraemonRobotDemonstrator } from './components/DoraemonRobotDemonstrator';
 
 const STORAGE_KEYS = {
   COMPONENTS: 'parts2build_components_v1',
-  QUOTA: 'parts2build_quota_v1',
   PROJECTS: 'parts2build_projects_v1'
 };
 
@@ -60,16 +53,6 @@ export default function App() {
     return PREDEFINED_PROJECTS;
   });
 
-  const [quotaConfig, setQuotaConfig] = useState<MonthlyQuotaConfig>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.QUOTA);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.error('Failed to load quota from localStorage', e);
-    }
-    return INITIAL_QUOTA_CONFIG;
-  });
-
   // Navigation tab state
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
 
@@ -77,9 +60,7 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState<ReuseProject | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isGuideModalOpen, setIsGuideModalOpen] = useState<boolean>(false);
-  const [isQuotaModalOpen, setIsQuotaModalOpen] = useState<boolean>(false);
   const [isAriseOpen, setIsAriseOpen] = useState<boolean>(false);
-  const [isDoraemonOpen, setIsDoraemonOpen] = useState<boolean>(false);
   const [editingComponent, setEditingComponent] = useState<ElectronicComponent | null>(null);
 
   // Success toast message
@@ -102,14 +83,6 @@ export default function App() {
     }
   }, [projects]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.QUOTA, JSON.stringify(quotaConfig));
-    } catch (e) {
-      console.error('Failed to save quota config', e);
-    }
-  }, [quotaConfig]);
-
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
@@ -121,10 +94,6 @@ export default function App() {
     setProjects((prev) => [newProject, ...prev]);
     showToast(`ARISE created "${newProject.title}" and saved it to your catalog!`);
   };
-
-  // Monthly Quota Metrics & Global Threshold Status
-  const disposalMetrics = getMonthlyDisposalMetrics(quotaConfig);
-  const thresholdStatus: ThresholdStatus = disposalMetrics.status;
 
   // Handlers for Components
   const handleSaveComponent = (
@@ -171,8 +140,7 @@ export default function App() {
 
   const handleResetToSampleData = () => {
     setComponents(INITIAL_COMPONENTS);
-    setQuotaConfig(INITIAL_QUOTA_CONFIG);
-    showToast('Reset inventory and monthly quota to industrial demo samples.');
+    showToast('Reset inventory to industrial demo samples.');
   };
 
   // Allocate components for project assembly (deduct inventory)
@@ -199,15 +167,8 @@ export default function App() {
     showToast(`Successfully simulated assembly of "${project.title}"! Required components deducted.`);
   };
 
-  // Border accent matching the safe-to-danger status
-  const containerAmbientRing = {
-    safe: 'ring-1 ring-emerald-500/20',
-    warning: 'ring-1 ring-amber-500/30',
-    danger: 'ring-1 ring-rose-500/40'
-  }[thresholdStatus];
-
   return (
-    <div className={`min-h-screen bg-slate-950 text-slate-100 flex flex-col ${containerAmbientRing}`}>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl bg-slate-900 border border-emerald-500/50 px-4 py-3 text-xs font-mono text-white shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-200">
@@ -229,8 +190,6 @@ export default function App() {
         }}
         onOpenGuideModal={() => setIsGuideModalOpen(true)}
         onOpenArise={() => setIsAriseOpen(true)}
-        onOpenDoraemon={() => setIsDoraemonOpen(true)}
-        thresholdStatus={thresholdStatus}
       />
 
       {/* Main Content Viewport */}
@@ -239,7 +198,6 @@ export default function App() {
           <DashboardView
             components={components}
             projects={projects}
-            quotaConfig={quotaConfig}
             onNavigate={(tab) => {
               setActiveTab(tab);
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -250,9 +208,7 @@ export default function App() {
               setIsAddModalOpen(true);
             }}
             onOpenGuideModal={() => setIsGuideModalOpen(true)}
-            onOpenQuotaModal={() => setIsQuotaModalOpen(true)}
             onOpenArise={() => setIsAriseOpen(true)}
-            onOpenDoraemon={() => setIsDoraemonOpen(true)}
           />
         )}
 
@@ -289,73 +245,6 @@ export default function App() {
             onNavigateToInventory={() => setActiveTab('inventory')}
           />
         )}
-
-        {activeTab === 'quota' && (
-          <div className="space-y-6">
-            <div className="border-b border-slate-800 pb-4">
-              <h1 className="text-2xl font-bold tracking-tight text-white">
-                Monthly E-Waste Disposal Quota &amp; Threshold Barometer
-              </h1>
-              <p className="text-sm text-slate-400 mt-1">
-                Monitor facility scrap disposal volumes, maintain compliance below safety limits, and analyze month-by-month hazardous e-waste generation.
-              </p>
-            </div>
-
-            <DisposalQuotaBarometer
-              config={quotaConfig}
-              onOpenRecordsModal={() => setIsQuotaModalOpen(true)}
-              onOpenAddRecordModal={() => setIsQuotaModalOpen(true)}
-            />
-
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-white">
-                    Logged Disposal Shipments ({quotaConfig.disposalLogs.length} Records)
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Authorized pickups and non-reusable scrap destruction.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setIsQuotaModalOpen(true)}
-                  className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-colors"
-                >
-                  Manage Logs &amp; Limits
-                </button>
-              </div>
-
-              <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/60">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-950 text-[11px] font-semibold text-slate-400 uppercase border-b border-slate-800">
-                    <tr>
-                      <th className="py-3 px-4">Date</th>
-                      <th className="py-3 px-4">Facility Dept</th>
-                      <th className="py-3 px-4">Classification</th>
-                      <th className="py-3 px-4 text-right">Disposed Mass</th>
-                      <th className="py-3 px-4">Contractor</th>
-                      <th className="py-3 px-4">Notes</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/80 font-mono">
-                    {quotaConfig.disposalLogs.map((log) => (
-                      <tr key={log.id} className="hover:bg-slate-900/60">
-                        <td className="py-3 px-4 text-slate-300">{log.date}</td>
-                        <td className="py-3 px-4 font-sans text-slate-200">{log.facilityDepartment}</td>
-                        <td className="py-3 px-4 font-sans text-slate-400">{log.wasteType}</td>
-                        <td className="py-3 px-4 text-right text-rose-400 font-bold tabular-nums">
-                          {log.weightKg} kg
-                        </td>
-                        <td className="py-3 px-4 font-sans text-slate-400">{log.disposalContractor}</td>
-                        <td className="py-3 px-4 font-sans text-slate-500 text-[11px]">{log.notes}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
 
       {/* Project Detail Modal */}
@@ -385,25 +274,6 @@ export default function App() {
       <PresentationGuideModal
         isOpen={isGuideModalOpen}
         onClose={() => setIsGuideModalOpen(false)}
-        onLaunchDoraemonDemo={() => setIsDoraemonOpen(true)}
-      />
-
-      {/* Monthly Quota & Logs Modal */}
-      <DisposalRecordsModal
-        isOpen={isQuotaModalOpen}
-        onClose={() => setIsQuotaModalOpen(false)}
-        config={quotaConfig}
-        onUpdateQuotaConfig={(newConfig) => {
-          setQuotaConfig(newConfig);
-          showToast('Updated facility monthly disposal quota and logs.');
-        }}
-      />
-
-      {/* Doraemon AI Robot Cartoon Demonstrator Modal */}
-      <DoraemonRobotDemonstrator
-        isOpen={isDoraemonOpen}
-        onClose={() => setIsDoraemonOpen(false)}
-        onNavigateToTab={(t) => setActiveTab(t)}
       />
 
       {/* ARISE AI Agent Companion Drawer */}
@@ -417,24 +287,6 @@ export default function App() {
           setSelectedProject(p);
         }}
       />
-
-      {/* Floating Doraemon Robot Cartoon Presenter Button */}
-      <button
-        onClick={() => setIsDoraemonOpen(true)}
-        className="fixed bottom-6 right-36 z-30 hidden sm:flex items-center gap-2 rounded-full bg-slate-900/95 border-2 border-cyan-400/80 px-3.5 py-2.5 text-white shadow-2xl shadow-cyan-500/25 hover:scale-105 active:scale-95 transition-all focus:outline-none"
-        title="Doraemon AI Robot Demonstration (Speaks in English)"
-      >
-        <div className="w-6 h-6 rounded-full overflow-hidden border border-cyan-300 shrink-0">
-          <img
-            src="/src/assets/images/doraemon_ai_robot_1791203744626.jpg"
-            alt="Doraemon Robot Cartoon"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <span className="font-['Syne',sans-serif] text-xs font-bold text-cyan-300">
-          Robot Demo 🔊
-        </span>
-      </button>
 
       {/* Floating ARISE AI Companion Trigger Widget */}
       <button
@@ -464,9 +316,7 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-4 text-slate-400 font-mono text-[11px]">
-            <span>Monthly Quota: {quotaConfig.monthlyQuotaKg} kg</span>
-            <span>·</span>
-            <span>Status: <strong className={thresholdStatus === 'safe' ? 'text-emerald-400' : thresholdStatus === 'warning' ? 'text-amber-400' : 'text-rose-400'}>{thresholdStatus.toUpperCase()}</strong></span>
+            <span>Empowering sustainable electronic component reuse</span>
             <span>·</span>
             <button
               onClick={() => setIsGuideModalOpen(true)}

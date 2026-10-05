@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ElectronicComponent, ComponentCategory, ComponentCondition } from '../types';
-import { X, Check, Sparkles, Scale, AlertCircle } from 'lucide-react';
+import { ElectronicComponent, ComponentCategory, ComponentCondition, ListingType } from '../types';
+import { X, Check, Sparkles, Scale, AlertCircle, ShoppingBag, Clock } from 'lucide-react';
 
 interface AddEditComponentModalProps {
   isOpen: boolean;
@@ -26,17 +26,17 @@ const CONDITIONS: ComponentCondition[] = [
 ];
 
 const PRESETS = [
-  { name: '5mm High-Intensity Red/Green LEDs', category: 'Passive Components', weight: 0.5, unit: 'pcs' },
-  { name: '220Ω / 1kΩ Carbon Film Resistors', category: 'Passive Components', weight: 0.25, unit: 'pcs' },
-  { name: 'Arduino Uno Rev3 Compatible Board', category: 'Microcontrollers & ICs', weight: 28, unit: 'pcs' },
-  { name: 'DC Toy / Geared Motor 3V-6V', category: 'Actuators & Motors', weight: 32, unit: 'pcs' },
-  { name: '40-pin Jumper Wires Assorted M-M', category: 'Power & Cables', weight: 1.2, unit: 'pcs' },
-  { name: 'SPST Rocker & Tactile Switches', category: 'Switches & Controls', weight: 3.5, unit: 'pcs' },
-  { name: 'HC-SR04 Ultrasonic Distance Sensor', category: 'Sensors', weight: 9.0, unit: 'pcs' },
-  { name: 'Analog Soil Moisture Sensor Module', category: 'Sensors', weight: 8.0, unit: 'pcs' },
-  { name: 'Salvaged Android Smartphone', category: 'Discarded Devices & Sub-assemblies', weight: 155, unit: 'pcs' },
-  { name: 'Type-A to Micro USB Cables 1m', category: 'Power & Cables', weight: 24, unit: 'pcs' },
-  { name: '4xAA / 9V Battery Holder Pack', category: 'Power & Cables', weight: 16, unit: 'pcs' }
+  { name: '5mm High-Intensity Red/Green LEDs', category: 'Passive Components', weight: 0.5, unit: 'pcs', price: 0.12, rent: 0, dep: 0, type: 'sale' as ListingType },
+  { name: '220Ω / 1kΩ Carbon Film Resistors', category: 'Passive Components', weight: 0.25, unit: 'pcs', price: 0.05, rent: 0, dep: 0, type: 'sale' as ListingType },
+  { name: 'Arduino Uno Rev3 Compatible Board', category: 'Microcontrollers & ICs', weight: 28, unit: 'pcs', price: 14.50, rent: 1.50, dep: 15.0, type: 'sale_or_rent' as ListingType },
+  { name: 'DC Toy / Geared Motor 3V-6V', category: 'Actuators & Motors', weight: 32, unit: 'pcs', price: 2.20, rent: 0.50, dep: 3.0, type: 'sale_or_rent' as ListingType },
+  { name: '40-pin Jumper Wires Assorted M-M', category: 'Power & Cables', weight: 1.2, unit: 'pcs', price: 0.10, rent: 0, dep: 0, type: 'sale' as ListingType },
+  { name: 'SPST Rocker & Tactile Switches', category: 'Switches & Controls', weight: 3.5, unit: 'pcs', price: 0.75, rent: 0, dep: 0, type: 'sale' as ListingType },
+  { name: 'HC-SR04 Ultrasonic Distance Sensor', category: 'Sensors', weight: 9.0, unit: 'pcs', price: 3.80, rent: 0.80, dep: 5.0, type: 'sale_or_rent' as ListingType },
+  { name: 'Analog Soil Moisture Sensor Module', category: 'Sensors', weight: 8.0, unit: 'pcs', price: 2.90, rent: 0.60, dep: 4.0, type: 'sale_or_rent' as ListingType },
+  { name: 'Salvaged Android Smartphone', category: 'Discarded Devices & Sub-assemblies', weight: 155, unit: 'pcs', price: 22.00, rent: 2.50, dep: 25.0, type: 'sale_or_rent' as ListingType },
+  { name: 'Type-A to Micro USB Cables 1m', category: 'Power & Cables', weight: 24, unit: 'pcs', price: 1.20, rent: 0, dep: 0, type: 'sale' as ListingType },
+  { name: '4xAA / 9V Battery Holder Pack', category: 'Power & Cables', weight: 16, unit: 'pcs', price: 1.50, rent: 0.40, dep: 2.0, type: 'sale_or_rent' as ListingType }
 ];
 
 export const AddEditComponentModal: React.FC<AddEditComponentModalProps> = ({
@@ -57,6 +57,13 @@ export const AddEditComponentModal: React.FC<AddEditComponentModalProps> = ({
   const [imageUrl, setImageUrl] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // Marketplace fields
+  const [listingType, setListingType] = useState<ListingType>('sale_or_rent');
+  const [pricePerUnit, setPricePerUnit] = useState<number>(1.50);
+  const [rentalRatePerDay, setRentalRatePerDay] = useState<number>(0.50);
+  const [rentalDeposit, setRentalDeposit] = useState<number>(5.00);
+  const [sellerName, setSellerName] = useState('Central Workshop Salvage Depot');
+
   useEffect(() => {
     if (initialData) {
       setName(initialData.name);
@@ -69,6 +76,11 @@ export const AddEditComponentModal: React.FC<AddEditComponentModalProps> = ({
       setPinoutOrSpecs(initialData.pinoutOrSpecs || '');
       setNotes(initialData.notes || '');
       setImageUrl(initialData.imageUrl || '');
+      setListingType(initialData.listingType || 'sale_or_rent');
+      setPricePerUnit(initialData.pricePerUnit || 1.50);
+      setRentalRatePerDay(initialData.rentalRatePerDay || 0.50);
+      setRentalDeposit(initialData.rentalDeposit || 5.00);
+      setSellerName(initialData.sellerName || 'Central Workshop Salvage Depot');
     } else {
       setName('');
       setCategory('Passive Components');
@@ -80,6 +92,11 @@ export const AddEditComponentModal: React.FC<AddEditComponentModalProps> = ({
       setPinoutOrSpecs('');
       setNotes('');
       setImageUrl('');
+      setListingType('sale_or_rent');
+      setPricePerUnit(1.50);
+      setRentalRatePerDay(0.50);
+      setRentalDeposit(5.00);
+      setSellerName('Central Workshop Salvage Depot');
     }
     setErrors({});
   }, [initialData, isOpen]);
@@ -91,6 +108,10 @@ export const AddEditComponentModal: React.FC<AddEditComponentModalProps> = ({
     setCategory(preset.category as ComponentCategory);
     setUnitWeightGrams(preset.weight);
     setUnit(preset.unit);
+    setPricePerUnit(preset.price);
+    setRentalRatePerDay(preset.rent);
+    setRentalDeposit(preset.dep);
+    setListingType(preset.type);
   };
 
   const validate = () => {
@@ -118,7 +139,12 @@ export const AddEditComponentModal: React.FC<AddEditComponentModalProps> = ({
         industrialSource: industrialSource.trim(),
         pinoutOrSpecs: pinoutOrSpecs.trim() || undefined,
         notes: notes.trim() || undefined,
-        imageUrl: imageUrl.trim() || undefined
+        imageUrl: imageUrl.trim() || undefined,
+        listingType,
+        pricePerUnit: listingType === 'sale' || listingType === 'sale_or_rent' ? Number(pricePerUnit) : undefined,
+        rentalRatePerDay: listingType === 'rent' || listingType === 'sale_or_rent' ? Number(rentalRatePerDay) : undefined,
+        rentalDeposit: listingType === 'rent' || listingType === 'sale_or_rent' ? Number(rentalDeposit) : undefined,
+        sellerName: sellerName.trim() || 'Central Workshop Salvage'
       },
       initialData?.id
     );

@@ -4,13 +4,11 @@ import { X, BookOpen, Layers, Cpu, Award, Milestone, Lightbulb, Compass, Printer
 interface PresentationGuideModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLaunchDoraemonDemo?: () => void;
 }
 
 export const PresentationGuideModal: React.FC<PresentationGuideModalProps> = ({
   isOpen,
-  onClose,
-  onLaunchDoraemonDemo
+  onClose
 }) => {
   if (!isOpen) return null;
 
@@ -33,17 +31,6 @@ export const PresentationGuideModal: React.FC<PresentationGuideModalProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {onLaunchDoraemonDemo && (
-              <button
-                onClick={() => {
-                  onClose();
-                  onLaunchDoraemonDemo();
-                }}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/20 transition-colors"
-              >
-                <span>🤖 Doraemon Demo</span>
-              </button>
-            )}
             <button
               onClick={() => window.print()}
               className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
@@ -62,42 +49,6 @@ export const PresentationGuideModal: React.FC<PresentationGuideModalProps> = ({
 
         {/* Body */}
         <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto text-sm text-slate-300 leading-relaxed font-sans">
-          {/* Doraemon Interactive Audio Presentation Spotlight */}
-          {onLaunchDoraemonDemo && (
-            <div className="p-4 rounded-xl border border-cyan-500/40 bg-gradient-to-r from-slate-950 to-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-xl overflow-hidden border border-cyan-400/60 shadow-md shrink-0">
-                  <img
-                    src="/src/assets/images/doraemon_ai_robot_1791203744626.jpg"
-                    alt="Doraemon AI Robot Cartoon Guide"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div>
-                  <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold tracking-wider block">
-                    Interactive English Audio Presenter
-                  </span>
-                  <h4 className="text-sm font-bold text-white">
-                    Watch Doraemon Robot Speak &amp; Present the Project in English
-                  </h4>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Step-by-step narration explaining the e-waste problem, quota barometer, and 3D visualizer.
-                  </p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => {
-                  onClose();
-                  onLaunchDoraemonDemo();
-                }}
-                className="shrink-0 px-4 py-2 rounded-lg text-xs font-bold bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 text-white shadow-md transition-all flex items-center gap-1.5"
-              >
-                <span>🤖 Launch Robot Voice Demo</span>
-              </button>
-            </div>
-          )}
-
           {/* Section 1: Title & Summary */}
           <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 space-y-2">
             <span className="text-[11px] uppercase tracking-wider text-emerald-400 font-mono font-bold block">
@@ -142,37 +93,10 @@ export const PresentationGuideModal: React.FC<PresentationGuideModalProps> = ({
             </div>
           </div>
 
-          {/* Section 3: Safe-to-Danger Monthly Quota Logic */}
+          {/* Section 3: Architecture Structure */}
           <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 space-y-2">
             <span className="text-[11px] uppercase tracking-wider text-emerald-400 font-mono font-bold block">
-              03. Safe-to-Danger Monthly Disposal Barometer
-            </span>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-mono">
-              <div className="p-2.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-300">
-                <span className="font-bold block">&lt; 65%: SAFE (Green)</span>
-                <span className="text-[11px] text-slate-300 font-sans block mt-1">
-                  Plant waste within municipal limits; normal recycling stream active.
-                </span>
-              </div>
-              <div className="p-2.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-300">
-                <span className="font-bold block">65% - 85%: CAUTION (Yellow)</span>
-                <span className="text-[11px] text-slate-300 font-sans block mt-1">
-                  Waste volume surging; technicians alerted to prioritize salvage desoldering.
-                </span>
-              </div>
-              <div className="p-2.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-300">
-                <span className="font-bold block">&gt; 85%: DANGER (Red)</span>
-                <span className="text-[11px] text-slate-300 font-sans block mt-1">
-                  Critical compliance breach; scrap shipments suspended until parts repurposed.
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Section 4: Architecture Structure */}
-          <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 space-y-2">
-            <span className="text-[11px] uppercase tracking-wider text-emerald-400 font-mono font-bold block">
-              04. Software Architecture &amp; Tech Stack
+              03. Software Architecture &amp; Tech Stack
             </span>
             <ul className="space-y-1.5 text-xs text-slate-300 list-disc list-inside">
               <li><strong>Frontend Engine:</strong> React 19 + TypeScript + Vite with full responsive layout for mobile, tablet, and desktop viewports.</li>
@@ -182,15 +106,15 @@ export const PresentationGuideModal: React.FC<PresentationGuideModalProps> = ({
             </ul>
           </div>
 
-          {/* Section 5: Demonstration Roadmap for Evaluators */}
+          {/* Section 4: Demonstration Roadmap for Evaluators */}
           <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 space-y-3">
             <span className="text-[11px] uppercase tracking-wider text-emerald-400 font-mono font-bold block">
-              05. Evaluator Presentation Walkthrough (3-Minute Demo)
+              04. Evaluator Presentation Walkthrough (3-Minute Demo)
             </span>
             <ol className="space-y-2 text-xs text-slate-300">
               <li className="flex items-start gap-2">
                 <span className="font-mono font-bold text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">Step 1</span>
-                <span><strong>Dashboard Overview:</strong> Show the global KPIs (reclaimed components count, diverted mass in kg, and the Safe/Caution/Danger disposal barometer).</span>
+                <span><strong>Dashboard Overview:</strong> Show the global KPIs (reclaimed components count, diverted mass in kg, and ready-to-build projects).</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="font-mono font-bold text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">Step 2</span>
@@ -211,10 +135,10 @@ export const PresentationGuideModal: React.FC<PresentationGuideModalProps> = ({
             </ol>
           </div>
 
-          {/* Section 6: Future Expansion Ideas */}
+          {/* Section 5: Future Expansion Ideas */}
           <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 space-y-2">
             <span className="text-[11px] uppercase tracking-wider text-emerald-400 font-mono font-bold block">
-              06. Future Expansion Roadmap
+              05. Future Expansion Roadmap
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div className="p-3 bg-slate-900/90 border border-slate-800 rounded-lg">
