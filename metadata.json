@@ -1,0 +1,6 @@
+{
+  "name": "PARTS 2 BUILD",
+  "description": "Industrial E-Waste Repurposing Platform & Project Matcher for sustainable electronics recovery, monthly disposal threshold tracking, and hands-on reuse projects.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
